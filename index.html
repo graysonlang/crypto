@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <title>Test Crypto</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <script src="CustomConsole.js" type="module"></script>
+    <script type="module">
+      import register from "./CustomConsole.js";
+      register((level, s) => { let d=document; d.getElementById('output').appendChild(d.createElement('P')).appendChild(d.createElement('label')).appendChild(d.createTextNode(s)) });
+    </script>
+    <script type="module">
+      window.addEventListener('load', () => {
+      });
+    </script>
+  </head>
+  <body><div class="code" id="output"></div></body>
+</html>

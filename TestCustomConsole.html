@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="UTF-8">
+    <title>Test Console Shim</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+    <script src="CustomConsole.js" type="module"></script>
+    <script type="module">
+      import register from "./CustomConsole.js";
+      register((level, s) => { let d=document; d.getElementById('output').appendChild(d.createElement('P')).appendChild(d.createElement('label')).appendChild(d.createTextNode(s)) });
+    </script>
+    <script type="module">
+      window.addEventListener('load', () => {
+        let b = true
+        let f = 1234.56789
+        let i = 123
+        let s = 'foo'
+
+        let a = ['a', 'b', 'c', b, f, i, s]
+        let a2 = ['a', 'b', 'c', ['foo', 'bar', 'baz']]
+        let a3 = [1,2,3,4,5,Number.NaN,undefined,,9]
+        let a4 = [];
+        a4[10] = 'Holes now exist';
+        a4.length = 50
+
+        let o = {a:a, b:b, f:f, i:i, s:s}
+        let o2 = { name:'a', reference:null }
+        let o3 = { name:'b', reference:o2 }
+        o2.reference = o3
+        let o4 = { a:o2, b:o3 }
+
+        let tests = [
+          [{a:undefined, b:Number.NaN, c:null, d:false, e: true}],
+
+          ['%s', a2],
+          ['%d', a2],
+          ['%f', a2],
+          ['%o', a2],
+
+          ['%20.2i', i],
+          ['%20.2f', -f],
+          ['%20.2f', f],
+
+          ['%.2i', f],
+          ['%.2d', f],
+          ['%.2f', f],
+
+          ['%10i', i],
+          ['%10f', -f],
+          ['%10f', f],
+
+          ['%s is %d years old.', 'Bob', 42],
+
+          ['string: %s, integer: %10.5i, object: %o, float: %.2f .......'],
+          ['string: %s, integer: %10.5i, object: %o, float: %.2f .......', s, i, o, f, f, f],
+          ['foo', 'bar', 'baz', 'bum'],
+
+          [b, i, f, a, o, 'bar', 'baz', 'bum'],
+          ['string: %s, integer: %10.5i, object: %o, float: %.2f'],
+
+          [a],
+          [a.toString()],
+          [a2],
+          [a3],
+          [a4],
+
+          [o],
+          [o.toString()],
+          [o2],
+          [o3],
+          [o4],
+
+          [false],
+          [undefined],
+          [''],
+          [],
+        ]
+
+        let count = 0
+        for (let test of tests) {
+          console.info('>>> Test %d', ++count)
+          console.log(...test)
+          console.log("\n")
+        }
+
+        console.warn("This is a %s!", "warning")
+
+        console.assert(true, 'Test assert error message: %d', 0)
+        console.assert(false, 'Test assert error message: %d', -10)
+
+        // console.error('THIS IS AN ERROR!')
+      });
+    </script>
+  </head>
+  <body><div class="code" id="output"></div></body>
+</html>
